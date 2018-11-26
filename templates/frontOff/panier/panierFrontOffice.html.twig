@@ -1,0 +1,56 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+    <div class="col-5">
+        <table class="table table-bordered">
+            <caption>Panier</caption>
+            <thead>
+            <tr><th>Nom du Produit</th><th>quantite</th><th>prix</th><th>prix total</th><th>supprimer</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if panier is defined %}
+                {% for produit in panier %}
+                    {% if id == produit.userId.getId() %}
+                    <tr>
+                        <td>{{ produit.produitId.nom }}</td><td>{{ produit.quantite }}</td><td>{{ produit.prix}}</td>
+                    <td>{{ (produit.quantite * produit.prix)|number_format(2,'.',',') }}</td>
+                    <form action="{{ path('ProduitClientPanier.delete') }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                        <td>
+                            <input hidden name="produitId" value="{{ produit.id }}"/>
+                            <button type="submit" class="btn btn-primary">Supprimer</button>
+                        </td>
+                    </form>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr class="table-warning"><td>Pas de Produits dans le panier</td></tr>
+            {% endif %}
+            </tbody>
+        </table>
+        {% if prixTotalValid is defined %}
+            <td>prix total = {{ prixTotalValid }} €</td>
+            <p> Commande validée </p>
+        {% endif %}
+        {% if prixTotal >0 %}
+            <div class="navbar">
+            <form action="{{ path('Panier.delete') }}">
+                <button class="btn btn-primary">Supprimer</button>
+            </form>
+            <form action="{{ path('index.index') }}">
+                <button class="btn btn-primary">Continuer achats</button>
+            </form>
+            <form action="{{ path('Panier.valid') }}">
+                <button class="btn btn-primary">Valider</button>
+            </form>
+            </div>
+        {% else %}
+            <p>Pas de produits dans le panier</p>
+            <form action="{{ path('index.index') }}">
+                <button class="btn btn-primary">Faire des achats</button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

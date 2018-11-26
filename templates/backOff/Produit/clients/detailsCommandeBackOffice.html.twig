@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    {# affichage lignes commande de l'id de la commande
+        + liens vers les produits #}
+    <div class="col-5">
+        <table class="table table-bordered">
+            <caption>Produits</caption>
+            <thead>
+            <tr><th>Nom produit</th><th>Prix</th><th>Quantite</th><th>Prix total</th></tr>
+            </thead>
+            <tbody>
+            {% if lignesCommande is defined %}
+                {% for produit in lignesCommande %}
+                    <tr>
+                        <td>{{ produit.produitId.getNom() }}</td><td>{{ produit.getPrix() }}</td><td>{{ produit.getQuantite() }}</td>
+                        <td>{{ (produit.getQuantite() * produit.getPrix())|number_format(2,'.',',') }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+        {% if prixTotal is defined %}
+            <td>Prix Total : {{ prixTotal }} €</td>
+        {% endif %}
+    </div>
+{% endblock %}
